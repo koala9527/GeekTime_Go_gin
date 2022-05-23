@@ -42,5 +42,5 @@ jobs:
         # shell to execute on server
         # SHELL: docker login -u ${{ secrets.ALIU }} -p ${{ secrets.ALIP }}  registry.cn-shenzhen.aliyuncs.com && docker pull docker pull registry.cn-shenzhen.aliyuncs.com/koala9527/geektime && docker stop geektime && docker stop geektime:latest && docker run --name geektime -p 9084:8001 -d geektime --restart=always  # optional, default is 
 
-        SHELL: cd /home/pi && rm -rf GeekTime_Go_gin && git clone git@github.com:koala9527/GeekTime_Go_gin.git && cd GeekTime_Go_gin && docker build . --file Dockerfile --tag geektime:latest && docker stop geektime && docker stop geektime && docker run --name geektime -p 9084:8001 -d geektime --restart=always  # optional, default is 
+        SHELL: cd /home/pi && rm -rf GeekTime_Go_gin && git clone git@github.com:koala9527/GeekTime_Go_gin.git && cd GeekTime_Go_gin && docker build . --file Dockerfile --tag geektime:latest && docker stop geektime && docker rm geektime && docker run --name geektime -p 9084:8001 -d geektime --restart=always  # optional, default is 
 
