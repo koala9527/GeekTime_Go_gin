@@ -1,0 +1,46 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # build:
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Build the Docker image
+  #     run: |
+  #       docker build . --file Dockerfile --tag geektime:v1
+  #       docker tag geektime:v1 registry.cn-shenzhen.aliyuncs.com/koala9527/geektime:v1
+  #       docker login -u ${{ secrets.ALIU }} -p ${{ secrets.ALIP }}  registry.cn-shenzhen.aliyuncs.com
+  #       docker push registry.cn-shenzhen.aliyuncs.com/koala9527/geektime:v1
+
+  deploy:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Server Shell
+      # You may pin to the exact commit or the version.
+      # uses: tzzs/server-shell@e6313d235c16b3b51c67277ba2ec70a55e43c0d6
+      uses: tzzs/server-shell@v3
+      with:
+        # server private key
+        PRIVATE_KEY: ${{ secrets.B4_MASTER_SSH_SEC_KEY }}
+        # server login username
+        USERNAME: root
+        # server ip
+        IP: ${{ secrets.B4_MASTER_SSH_HOST }}
+        # The port to connect to the server ssh
+        PORT: ${{ secrets.B4_MASTER_SSH_PORT }}
+        # shell to execute on server
+        # SHELL: docker login -u ${{ secrets.ALIU }} -p ${{ secrets.ALIP }}  registry.cn-shenzhen.aliyuncs.com && docker pull docker pull registry.cn-shenzhen.aliyuncs.com/koala9527/geektime && docker stop geektime && docker stop geektime:latest && docker run --name geektime -p 9084:8001 -d geektime --restart=always  # optional, default is 
+
+        SHELL: cd /home/pi/GeekTime_Go_gin && git pull origin main && docker build . --file Dockerfile --tag geektime:latest && docker stop geektime && docker stop geektime && docker run --name geektime -p 9084:8001 -d geektime:latest --restart=always  # optional, default is 
+
